@@ -1,0 +1,1475 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Banshee Documentation</title>
+    <link rel="stylesheet" href="docs.css" />
+    <link rel="icon" href="favicon.ico" />
+  </head>
+  <body>
+    <div class="reading-progress" data-progress><span></span></div>
+
+    <div class="ambient">
+      <canvas class="particle-canvas" data-particles></canvas>
+      <span class="orb orb-1"></span>
+      <span class="orb orb-2"></span>
+      <span class="orb orb-3"></span>
+      <span class="orb orb-4"></span>
+      <span class="gridline"></span>
+    </div>
+
+    <header class="hero" id="overview" data-section>
+      <div class="hero-top">
+        <div class="brand">
+          <div class="logo">B</div>
+          <div>
+            <div class="title">Banshee Documentation</div>
+            <div class="subtitle">Field manual for AI-assisted OSINT, dorking, and continuous monitoring</div>
+          </div>
+        </div>
+        <div class="hero-actions">
+          <a class="btn" href="#quickstart">Quickstart</a>
+          <a class="btn ghost" href="#reference">Full Flag Reference</a>
+        </div>
+      </div>
+
+      <div class="hero-grid">
+        <div class="hero-copy">
+          <p class="tagline">Operational guide, deployment notes, and feature deep dives</p>
+          <h1>Understand how Banshee works, configure every engine, and run high-signal recon at scale.</h1>
+          <p>
+            This page explains the full lifecycle of a scan: how dorks are generated, how search engines
+            are queried, how results are filtered and enriched, and how intelligence is retained for
+            future runs. Everything here maps directly to the CLI and config files in the Banshee repo.
+          </p>
+          <div class="pill-row">
+            <span class="pill">AI dorking</span>
+            <span class="pill">SMART chaining</span>
+            <span class="pill">Learn mode</span>
+            <span class="pill">Wayback foresee</span>
+            <span class="pill">Monitor cycles</span>
+          </div>
+        </div>
+        <div class="hero-panel">
+          <div class="panel-header">
+            <div>
+              <div class="panel-title">System Snapshot</div>
+              <div class="panel-sub">What Banshee expects on disk</div>
+            </div>
+            <span class="badge">CLI</span>
+          </div>
+          <ul class="panel-list">
+            <li><span>Inputs</span><strong>stdin, prompt, dictionary, extensions</strong></li>
+            <li><span>Engines</span><strong>Google CSE + Brave Search</strong></li>
+            <li><span>AI</span><strong>gemini-cli with model override</strong></li>
+            <li><span>Outputs</span><strong>URLs, intelligence JSON, analysis summaries</strong></li>
+            <li><span>Cache</span><strong>AI, Wayback, research, successful URLs</strong></li>
+          </ul>
+          <div class="terminal shell" data-shell>
+            <div class="terminal-head">
+              <span class="terminal-dot terminal-dot--close" aria-hidden="true"></span>
+              <button
+                class="terminal-dot terminal-dot--minimize"
+                type="button"
+                data-shell-minimize
+                aria-label="Minimize terminal"
+                disabled
+              ></button>
+              <button
+                class="terminal-dot terminal-dot--fullscreen"
+                type="button"
+                data-shell-fullscreen
+                aria-label="Toggle fullscreen terminal"
+              ></button>
+            </div>
+            <div class="shell-body">
+              <div class="shell-output" data-shell-output>
+                <div class="shell-line shell-note">Banshee demo shell (simulated). Type "help" for commands.</div>
+                <div class="shell-line shell-note">Files: /home/elite/go/bin/banshee, /home/elite/flag.txt, /home/elite/.exploit/main.sh</div>
+                <div class="shell-line shell-note">Try: banshee --help</div>
+              </div>
+              <div class="shell-input">
+                <span class="shell-prompt" data-shell-prompt>elite@banshee:~$</span>
+                <input
+                  class="shell-text"
+                  type="text"
+                  data-shell-input
+                  spellcheck="false"
+                  autocapitalize="off"
+                  autocomplete="off"
+                  autocorrect="off"
+                  inputmode="text"
+                  aria-label="Simulated terminal input"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="layout">
+      <aside class="toc" data-dock id="toc-dock">
+        <div class="toc-toolbar">
+          <div class="toc-toolbar-title">Navigation Dock</div>
+          <button class="toc-toggle" type="button" data-dock-toggle aria-controls="toc-dock" aria-expanded="true" aria-label="Hide navigation dock">Hide</button>
+        </div>
+        <div class="toc-body">
+          <div class="toc-card">
+            <div class="toc-title">Contents</div>
+            <nav class="toc-nav">
+              <a href="#overview" data-nav>Overview</a>
+              <a href="#about" data-nav>About Banshee</a>
+              <a href="#how" data-nav>How It Works</a>
+              <a href="#use-cases" data-nav>Use Cases</a>
+              <a href="#effective-usage" data-nav>Effective Usage</a>
+              <a href="#requirements" data-nav>Requirements</a>
+              <a href="#api-keys" data-nav>API Keys</a>
+              <a href="#quickstart" data-nav>Quickstart</a>
+              <a href="#examples" data-nav>Practical Examples</a>
+              <a href="#features" data-nav>Feature Map</a>
+              <a href="#analysis" data-nav>Analysis Pipeline</a>
+              <a href="#monitoring" data-nav>Monitoring</a>
+              <a href="#intelligence" data-nav>Intelligence</a>
+              <a href="#internal-files" data-nav>Internal Files</a>
+              <a href="#configuration" data-nav>Configuration</a>
+              <a href="#outputs" data-nav>Outputs and Caches</a>
+              <a href="#reference" data-nav>Flag Reference</a>
+              <a href="#faq" data-nav>FAQ</a>
+              <a href="#eula" data-nav>EULA</a>
+            </nav>
+          </div>
+
+          <div class="toc-card">
+            <div class="toc-title">Live Counters</div>
+            <div class="stat-grid">
+              <div>
+                <div class="stat-label">Supported flags</div>
+                <div class="stat-value" data-count="49">0</div>
+              </div>
+              <div>
+                <div class="stat-label">AI modes</div>
+                <div class="stat-value" data-count="6">0</div>
+              </div>
+              <div>
+                <div class="stat-label">Analysis flows</div>
+                <div class="stat-value" data-count="4">0</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="toc-card callout">
+            <div class="toc-title">Core Rule</div>
+            <p>
+              Banshee expects targets via stdin. For a single domain, use:
+              <code>echo example.com | banshee ...</code>
+            </p>
+          </div>
+        </div>
+      </aside>
+
+      <main class="content">
+        <section id="about" class="section reveal" data-section>
+          <div class="section-head">
+            <h2>About Banshee</h2>
+            <p>AI-assisted OSINT and dorking for continuous discovery, analysis, and learning.</p>
+          </div>
+          <div class="grid two">
+            <div class="card">
+              <h3>What it does</h3>
+              <ul>
+                <li>Generates focused dorks from prompts, research, random modes, and SMART follow-ups.</li>
+                <li>Queries Google CSE and Brave Search in parallel with dedupe and pacing.</li>
+                <li>Enriches results with tech detection, Wayback intelligence, and monitoring cycles.</li>
+                <li>Optionally analyzes documents, HTTP responses, and inline code via gemini-cli.</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>How it works (in code)</h3>
+              <ul>
+                <li><code>Run()</code> loads config, initializes caches, and wires a <code>Config</code> pipeline.</li>
+                <li>Targets flow from stdin into the dork pipeline; queries are built from flags and AI modules.</li>
+                <li>Search helpers fetch results, then dedupe, filter, and enrich them in worker pools.</li>
+                <li>Analysis modules summarize findings and persist intelligence in <code>~/.config/banshee</code>.</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>Findings it can surface</h3>
+              <ul>
+                <li>Exposed admin panels, dashboards, debug endpoints, and misconfigured services.</li>
+                <li>Credentials, tokens, API keys, and secrets in responses or public documents.</li>
+                <li>Leaked configs, backups, and sensitive files (PDF, DOCX, XLSX, etc.).</li>
+                <li>Legacy or forgotten endpoints via Wayback and CVE-mapped exposures.</li>
+                <li>Paste-site leaks tied to your keywords or organization.</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>Operational boundaries</h3>
+              <ul>
+                <li>Banshee is a discovery and analysis tool, not an exploitation framework.</li>
+                <li>Always validate findings manually and respect legal scope.</li>
+                <li>Use <code>oos.txt</code> and exclusion flags to stay in-scope.</li>
+                <li>Need support? Email <code>gorkem@cyberpars.com</code>.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section id="how" class="section reveal" data-section>
+          <div class="section-head">
+            <h2>How Banshee Works</h2>
+            <p>From input to intelligence: each run follows a predictable pipeline.</p>
+          </div>
+          <div class="pipeline">
+            <div class="step">
+              <div class="step-num">1</div>
+              <div>
+                <h3>Ingest Targets</h3>
+                <p>Domains arrive from stdin (single domain or list). Optional inputs include dork files, dictionaries, extensions, and prompts. Use <code>--find-apex</code> to expand a hostname into tenant apex domains before scanning.</p>
+              </div>
+            </div>
+            <div class="step">
+              <div class="step-num">2</div>
+              <div>
+                <h3>Generate Dorks</h3>
+                <p>Use manual queries, AI prompts, random mode, research mode, or SMART follow-ups. Multi-lang and date operators can expand coverage.</p>
+              </div>
+            </div>
+            <div class="step">
+              <div class="step-num">3</div>
+              <div>
+                <h3>Search Engines</h3>
+                <p>Google CSE and Brave Search run in parallel with adaptive pacing, key rotation, and retry logic. Results are de-duplicated immediately.</p>
+              </div>
+            </div>
+            <div class="step">
+              <div class="step-num">4</div>
+              <div>
+                <h3>Filter and Enrich</h3>
+                <p>Out-of-scope patterns, exclusion rules, and dedupe logic reduce noise. Tech detection and intelligence layers enrich high-value URLs.</p>
+              </div>
+            </div>
+            <div class="step">
+              <div class="step-num">5</div>
+              <div>
+                <h3>Analyze</h3>
+                <p>Optional AI analysis: document review, response analysis, inline JS inspection, and vulnerability reasoning. Findings can be scored.</p>
+              </div>
+            </div>
+            <div class="step">
+              <div class="step-num">6</div>
+              <div>
+                <h3>Persist Intelligence</h3>
+                <p>Learn mode writes intelligence JSON and success patterns. Wayback cache and AI cache shorten future runs.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="use-cases" class="section reveal" data-section>
+          <div class="section-head">
+            <h2>Use Cases</h2>
+            <p>Practical scenarios where Banshee delivers high-signal results.</p>
+          </div>
+          <div class="grid two">
+            <div class="card">
+              <h3>Exposure discovery</h3>
+              <p>Find admin panels, dashboards, and exposed controls across a target's web surface.</p>
+              <ul>
+                <li>Start with a focused dork and expand with SMART follow ups.</li>
+                <li>Combine with tech detection to prioritize vulnerable stacks.</li>
+              </ul>
+              <pre><code>echo example.com | banshee -q "inurl:admin intitle:login" -a --tech-detect --smart</code></pre>
+            </div>
+            <div class="card">
+              <h3>Sensitive document hunting</h3>
+              <p>Identify public PDFs and office documents, then analyze for secrets or PII.</p>
+              <ul>
+                <li>Use extensions to focus results and reduce noise.</li>
+                <li>Filter to only sensitive documents after analysis.</li>
+              </ul>
+              <pre><code>echo example.com | banshee -e pdf,docx,xlsx --analyze-docs --filter-docs --learn</code></pre>
+            </div>
+            <div class="card">
+              <h3>API and endpoint recon</h3>
+              <p>Find exposed APIs, test endpoints, and config leaks with response analysis.</p>
+              <ul>
+                <li>Pair with <code>--dedupe</code> to avoid repeated analysis.</li>
+                <li>Use targeted dorks like <code>inurl:api</code> or <code>filetype:json</code>.</li>
+              </ul>
+              <pre><code>echo example.com | banshee -q "inurl:api intext:token" --dedupe --analyze-responses</code></pre>
+            </div>
+            <div class="card">
+              <h3>Asset inventory and subdomain expansion</h3>
+              <p>Enumerate subdomains and build an asset inventory.</p>
+              <ul>
+                <li>Enable deep mode for recursive discovery.</li>
+                <li>Use learn mode to persist and reuse discovered assets.</li>
+                <li>Works with TLD input for broad mapping (for example, <code>.gov</code>).</li>
+              </ul>
+              <pre><code>echo example.com | banshee -s --deep --learn</code></pre>
+            </div>
+            <div class="card">
+              <h3>Tenant apex expansion</h3>
+              <p>Resolve Microsoft tenant domains and pivot into apex targets tied to a single hostname.</p>
+              <ul>
+                <li>Uses the OpenID configuration to extract the tenant ID.</li>
+                <li>Expands stdin targets before AI and targeted dorking.</li>
+              </ul>
+              <pre><code>echo login.example.com | banshee --find-apex -ai "find admin portals" --smart</code></pre>
+            </div>
+            <div class="card">
+              <h3>Tech and CVE mapping</h3>
+              <p>Update the CVE database and generate specialized dorks per CVE.</p>
+              <ul>
+                <li>Scope updates with <code>--cve-year</code> and <code>--severity</code>.</li>
+                <li>Add <code>--nvd-api-key</code> to speed up CVE updates.</li>
+              </ul>
+              <pre><code>banshee --update-cve-db --cve-year 2025 --severity critical --ai-dork-generation</code></pre>
+            </div>
+            <div class="card">
+              <h3>Cloud asset enumeration</h3>
+              <p>Hunt for exposed cloud storage buckets and asset endpoints tied to your target.</p>
+              <ul>
+                <li>Random cloud focus generates provider-specific dorks.</li>
+                <li>Useful for S3, Azure Blob, GCP Storage, and similar services.</li>
+              </ul>
+              <pre><code>echo example.com | banshee -random cloud -quantity 15 -v</code></pre>
+            </div>
+            <div class="card">
+              <h3>Research mode deep dive</h3>
+              <p>Use AI to research target context and generate higher-signal dorks.</p>
+              <ul>
+                <li>Increase depth when you need broader coverage.</li>
+                <li>Combine with <code>--multi-lang</code> for international targets.</li>
+              </ul>
+              <pre><code>echo example.com | banshee --research --research-depth 3 --multi-lang --learn</code></pre>
+            </div>
+            <div class="card">
+              <h3>Historical attack surface</h3>
+              <p>Mine Wayback history for hidden paths, old assets, and forgotten endpoints.</p>
+              <ul>
+                <li>Filter by status codes with <code>--wmc</code>.</li>
+                <li>Use <code>--smart</code> to follow discovered patterns.</li>
+              </ul>
+              <pre><code>echo example.com | banshee --foresee --wmc 200,301,302 --smart</code></pre>
+            </div>
+            <div class="card">
+              <h3>Continuous monitoring</h3>
+              <p>Run repeated scans with diffing, filtering, and optional analysis per cycle.</p>
+              <ul>
+                <li>Use <code>--monitor-time</code> to set the cycle interval (minutes).</li>
+                <li>Enable <code>--filter-mon</code> to avoid repeating URLs across cycles.</li>
+              </ul>
+              <pre><code>cat domains.txt | banshee --monitor "exposed credentials" --monitor-time 60 --filter-mon --analyze-mon</code></pre>
+            </div>
+            <div class="card">
+              <h3>Leak detection</h3>
+              <p>Scan paste sites for exposed credentials and sensitive strings.</p>
+              <ul>
+                <li>Provide keywords to focus on specific brands or products.</li>
+                <li>Use AI modes for deeper classification and summarization.</li>
+              </ul>
+              <pre><code>echo example.com | banshee --check-leaks --keywords "company api key"</code></pre>
+            </div>
+          </div>
+        </section>
+
+        <section id="effective-usage" class="section reveal" data-section>
+          <div class="section-head">
+            <h2>Effective Usage</h2>
+            <p>Practical guidance for high-signal, low-noise runs.</p>
+          </div>
+          <div class="grid two">
+            <div class="card">
+              <h3>First pass workflow</h3>
+              <ol>
+                <li>Start narrow with a low page count to validate signal.</li>
+                <li>Expand with AI or SMART once the baseline looks good.</li>
+                <li>Turn on learn mode to persist findings for the next run.</li>
+              </ol>
+              <pre><code>echo example.com | banshee -q "inurl:admin" --pages 5 --adaptive
+echo example.com | banshee -ai "admin panels, dashboards, internal tools" --smart --learn</code></pre>
+            </div>
+            <div class="card">
+              <h3>Scope control</h3>
+              <ul>
+                <li>Define exclusions in <code>~/.config/banshee/oos.txt</code> (wildcards supported).</li>
+                <li>Use <code>-x</code> or <code>--exclusions</code> for quick skip lists or files.</li>
+                <li>Add <code>--include-dates</code> when you only want recent results.</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>Performance and quotas</h3>
+              <ul>
+                <li>Limit engines with <code>-engine google</code> or <code>-engine brave</code> when keys are scarce.</li>
+                <li>Scale with <code>--workers</code> and control pacing with <code>--delay</code>.</li>
+                <li>Keep <code>delay=0</code> when using <code>--adaptive</code> so the scheduler can adjust.</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>AI cost control</h3>
+              <ul>
+                <li>Use <code>--dedupe</code> before response analysis to avoid repeated AI calls.</li>
+                <li>Use <code>--filter-docs</code> to keep only sensitive documents after analysis.</li>
+                <li>Stable prompts improve cache hits in <code>~/.config/banshee/.ai_cache.json</code> (24 hour TTL).</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>Random mode hygiene</h3>
+              <ul>
+                <li>Random mode writes used dorks to <code>~/.config/banshee/.ignore.file</code>.</li>
+                <li>Override with <code>--ignore-file</code> or bypass with <code>--flush</code>.</li>
+                <li>Use <code>--quantity</code> to bound the number of generated dorks.</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>Monitor mode runbook</h3>
+              <ul>
+                <li><code>--monitor</code> builds its own dorks, so do not combine with <code>-q</code>, <code>-ai</code>, or <code>-random</code>.</li>
+                <li><code>--filter-mon</code> dedupes across cycles; <code>--analyze-mon</code> enables per-cycle analysis.</li>
+                <li><code>--monitor</code> is not compatible with <code>--dedupe</code> (use <code>--filter-mon</code> instead).</li>
+              </ul>
+              <pre><code>cat domains.txt | banshee --monitor "api tokens" --monitor-time 45 --filter-mon --analyze-mon</code></pre>
+            </div>
+            <div class="card">
+              <h3>Analysis constraints</h3>
+              <ul>
+                <li><code>--analyze-responses</code> requires <code>--dedupe</code>.</li>
+                <li><code>--inline-code-analysis</code> cannot be combined with doc or response analysis.</li>
+                <li><code>--analyze-response-only</code> expects URLs from stdin; <code>--analyze-code-only</code> expects code.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section id="requirements" class="section reveal" data-section>
+          <div class="section-head">
+            <h2>Requirements</h2>
+            <p>What you need for full functionality and optional AI acceleration.</p>
+          </div>
+          <div class="grid two">
+            <div class="card">
+              <h3>Runtime</h3>
+              <ul>
+                <li>Built binary for your OS (Go 1.24.5 is used to build in this repo).</li>
+                <li>Network access to Google CSE, Brave Search, and optional NVD API.</li>
+                <li>stdin-based input for targets and URL lists.</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>AI Features</h3>
+              <ul>
+                <li>Node.js + npm installed (required for gemini-cli).</li>
+                <li><code>gemini-cli</code> installed (npm package: <code>@google/generative-ai-cli</code>).</li>
+                <li>Gemini API key (or OAuth auth) for AI generation and analysis.</li>
+                <li>Optional model override with <code>--model</code>.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section id="api-keys" class="section reveal" data-section>
+          <div class="section-head">
+            <h2>API Keys and Setup</h2>
+            <p>Step-by-step instructions for every required service.</p>
+          </div>
+          <div class="tabs" data-tabs>
+            <button class="tab active" data-tab="google">Google CSE</button>
+            <button class="tab" data-tab="brave">Brave Search</button>
+            <button class="tab" data-tab="nvd">NVD CVE</button>
+            <button class="tab" data-tab="gemini">Gemini AI</button>
+          </div>
+          <div class="tab-panels">
+            <div class="tab-panel active" data-panel="google">
+              <h3>Google Custom Search API (required for Google engine)</h3>
+              <ol>
+                <li>Create a Google Cloud project.</li>
+                <li>Enable the Custom Search API for the project.</li>
+                <li>Create one or more API keys.</li>
+                <li>Create a Custom Search Engine (CSE) and enable "Search the entire web".</li>
+                <li>Save one key per line in <code>~/.config/banshee/keys.txt</code>. Do not add comments.</li>
+                <li>Add multiple keys to increase quota and let Banshee rotate automatically.</li>
+                <li>Validate with <code>-engine google</code> and <code>-v</code> for verbose output.</li>
+              </ol>
+              <pre><code>AIzaSyExampleKeyOne
+AIzaSyExampleKeyTwo</code></pre>
+              <div class="callout">
+                Banshee uses a built-in CSE ID. If you need a custom CX, update the source constant and rebuild.
+              </div>
+            </div>
+            <div class="tab-panel" data-panel="brave">
+              <h3>Brave Search API (required for Brave engine)</h3>
+              <ol>
+                <li>Create a Brave Search API account.</li>
+                <li>Generate a subscription token.</li>
+                <li>Save one token per line in <code>~/.config/banshee/brave-keys.txt</code>. No comments.</li>
+                <li>Add multiple tokens to increase throughput and let Banshee rotate keys.</li>
+                <li>Validate with <code>-engine brave</code> and <code>-v</code> for verbose output.</li>
+              </ol>
+              <pre><code>BRAVE_TOKEN_ONE
+BRAVE_TOKEN_TWO</code></pre>
+              <p>Brave free tier is limited to one page per query. Banshee auto limits accordingly.</p>
+            </div>
+            <div class="tab-panel" data-panel="nvd">
+              <h3>NVD API Key (optional, for CVE updates)</h3>
+              <ol>
+                <li>Request a free API key: <code>https://nvd.nist.gov/developers/request-an-api-key</code></li>
+                <li>Save it to <code>~/.config/banshee/nvd-api-key.txt</code> or pass <code>--nvd-api-key</code>.</li>
+                <li>Run CVE updates with <code>--update-cve-db</code> (optionally <code>--cve-year</code> and <code>--severity</code>).</li>
+              </ol>
+              <pre><code>YOUR_NVD_API_KEY</code></pre>
+              <p>Without a key, NVD rate limits will slow CVE updates significantly.</p>
+            </div>
+            <div class="tab-panel" data-panel="gemini">
+              <h3>Gemini CLI (required for AI modes)</h3>
+              <ol>
+                <li>Install: <code>npm install -g @google/generative-ai-cli</code></li>
+                <li>Authenticate with OAuth: <code>gemini-cli auth</code> (or add an API key file).</li>
+                <li>For API keys, put one key per line in <code>~/.config/banshee/gemini-api-key.txt</code>.</li>
+                <li>Lines starting with <code>#</code> are ignored; the first valid key is used.</li>
+                <li>Leave the file empty if you only use OAuth.</li>
+              </ol>
+              <pre><code># one key per line, comments allowed
+AIzaSyExampleKeyOne
+AIzaSyExampleKeyTwo</code></pre>
+              <p>Banshee passes the key as <code>GOOGLE_AI_API_KEY</code> when invoking gemini-cli. Use <code>--model</code> to override the default model.</p>
+            </div>
+          </div>
+        </section>
+
+        <section id="quickstart" class="section reveal" data-section>
+          <div class="section-head">
+            <h2>Quickstart</h2>
+            <p>Ready-to-run commands that cover common workflows.</p>
+          </div>
+          <div class="grid two">
+            <div class="code-card">
+              <div class="code-head">
+                <div>
+                  <h3>Single target dork</h3>
+                  <p>Target from stdin + custom query.</p>
+                </div>
+                <button class="btn ghost" data-copy>Copy</button>
+              </div>
+              <pre><code>echo example.com | banshee -q "inurl:admin" -a --tech-detect</code></pre>
+            </div>
+            <div class="code-card">
+              <div class="code-head">
+                <div>
+                  <h3>AI prompt</h3>
+                  <p>Generate dorks with AI and run them immediately.</p>
+                </div>
+                <button class="btn ghost" data-copy>Copy</button>
+              </div>
+              <pre><code>echo example.com | banshee -ai "sensitive dashboards and exposed APIs" --smart --suggestions</code></pre>
+            </div>
+            <div class="code-card">
+              <div class="code-head">
+                <div>
+                  <h3>Random mode</h3>
+                  <p>Generate focused dorks without writing a prompt.</p>
+                </div>
+                <button class="btn ghost" data-copy>Copy</button>
+              </div>
+              <pre><code>echo example.com | banshee -random sqli --quantity 12 --learn</code></pre>
+            </div>
+            <div class="code-card">
+              <div class="code-head">
+                <div>
+                  <h3>Monitor mode</h3>
+                  <p>Continuous scanning with analysis.</p>
+                </div>
+                <button class="btn ghost" data-copy>Copy</button>
+              </div>
+              <pre><code>cat domains.txt | banshee --monitor "sensitive pdf" --monitor-time 60 --filter-mon --analyze-mon</code></pre>
+            </div>
+            <div class="code-card">
+              <div class="code-head">
+                <div>
+                  <h3>Document analysis</h3>
+                  <p>Analyze docs and keep only sensitive hits.</p>
+                </div>
+                <button class="btn ghost" data-copy>Copy</button>
+              </div>
+              <pre><code>echo example.com | banshee -e pdf,docx --analyze-docs --filter-docs</code></pre>
+            </div>
+            <div class="code-card">
+              <div class="code-head">
+                <div>
+                  <h3>Response analysis only</h3>
+                  <p>Analyze raw responses from stdin.</p>
+                </div>
+                <button class="btn ghost" data-copy>Copy</button>
+              </div>
+              <pre><code>echo https://example.com/api | banshee --analyze-response-only</code></pre>
+            </div>
+          </div>
+        </section>
+
+        <section id="examples" class="section reveal" data-section>
+          <div class="section-head">
+            <h2>Practical Examples</h2>
+            <p>Command + output pairs to make the flags feel concrete.</p>
+          </div>
+          <div class="examples-grid">
+            <div class="example-card">
+              <div class="example-head">
+                <div>
+                  <div class="example-kicker">Response Analysis</div>
+                  <h3>Analyze a single response</h3>
+                  <p>Use <code>--analyze-response-only</code> when you already have a URL.</p>
+                </div>
+                <button class="btn ghost" data-copy>Copy</button>
+              </div>
+              <div class="example-tabs" data-example-tabs>
+                <button class="example-tab active" data-example-tab="command">Command</button>
+                <button class="example-tab" data-example-tab="output">Click to see the example output</button>
+              </div>
+              <div class="example-panels">
+                <div class="example-panel active" data-example-panel="command">
+                  <div class="example-block">
+                    <div class="example-label">Command</div>
+                    <pre data-copy-source><code>echo https://gateway.example.nz:9443/portal/login | banshee --analyze-response-only -v</code></pre>
+                  </div>
+                </div>
+                <div class="example-panel" data-example-panel="output">
+                  <div class="example-block output">
+                    <div class="example-label">Output (sanitized)</div>
+                    <pre><code>[stdin] Processing single domain: https://gateway.example.nz:9443/portal/login
+[RESPONSE-ANALYSIS] Analyzing batch 1/1 (1 URLs)
+https://gateway.example.nz:9443/portal/login | [RA] - AWS credentials exposed; Slack webhook exposed | Sensitive: AWS_KEY:AKIA...; AWS_SECRET:3x4mple...; SLACK:https://hooks.slack.com/services/T00/EXAMPLE/ABC123</code></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="example-card">
+              <div class="example-head">
+                <div>
+                  <div class="example-kicker">Learning</div>
+                  <h3>SMART pattern learning</h3>
+                  <p>Combine <code>--smart</code> and <code>--learn</code> for adaptive follow ups.</p>
+                </div>
+                <button class="btn ghost" data-copy>Copy</button>
+              </div>
+              <div class="example-tabs" data-example-tabs>
+                <button class="example-tab active" data-example-tab="command">Command</button>
+                <button class="example-tab" data-example-tab="output">Click to see the example output</button>
+              </div>
+              <div class="example-panels">
+                <div class="example-panel active" data-example-panel="command">
+                  <div class="example-block">
+                    <div class="example-label">Command</div>
+                    <pre data-copy-source><code>echo acme.example | banshee --smart --learn -v</code></pre>
+                  </div>
+                </div>
+                <div class="example-panel" data-example-panel="output">
+                  <div class="example-block output">
+                    <div class="example-label">Output (abridged)</div>
+                    <pre><code>[SMART] Analyzing 12 successful URLs from past scans...
+[SMART] Generated focused dorks from successful URL patterns
+[LEARN] Loaded intelligence: 5 previous scans, 18 successful dorks</code></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="example-card">
+              <div class="example-head">
+                <div>
+                  <div class="example-kicker">Monitoring</div>
+                  <h3>Monitor a fleet</h3>
+                  <p>Schedule repeated scans with <code>--monitor</code> and <code>--filter-mon</code>.</p>
+                </div>
+                <button class="btn ghost" data-copy>Copy</button>
+              </div>
+              <div class="example-tabs" data-example-tabs>
+                <button class="example-tab active" data-example-tab="command">Command</button>
+                <button class="example-tab" data-example-tab="output">Click to see the example output</button>
+              </div>
+              <div class="example-panels">
+                <div class="example-panel active" data-example-panel="command">
+                  <div class="example-block">
+                    <div class="example-label">Command</div>
+                    <pre data-copy-source><code>cat domains.txt | banshee --monitor "exposed invoices" --monitor-time 30 --filter-mon</code></pre>
+                  </div>
+                </div>
+                <div class="example-panel" data-example-panel="output">
+                  <div class="example-block output">
+                    <div class="example-label">Output (abridged)</div>
+                    <pre><code>[MONITOR] Starting monitor mode (interval 30 minutes)
+[MONITOR] Cycle 1/inf: running 3 targets
+[MONITOR] New URLs this cycle: 27 (filtered 198)</code></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="example-card">
+              <div class="example-head">
+                <div>
+                  <div class="example-kicker">Document Analysis</div>
+                  <h3>Filter sensitive documents</h3>
+                  <p>Pair <code>--analyze-docs</code> with <code>--filter-docs</code> to keep only hits.</p>
+                </div>
+                <button class="btn ghost" data-copy>Copy</button>
+              </div>
+              <div class="example-tabs" data-example-tabs>
+                <button class="example-tab active" data-example-tab="command">Command</button>
+                <button class="example-tab" data-example-tab="output">Click to see the example output</button>
+              </div>
+              <div class="example-panels">
+                <div class="example-panel active" data-example-panel="command">
+                  <div class="example-block">
+                    <div class="example-label">Command</div>
+                    <pre data-copy-source><code>echo example.com | banshee -e pdf,docx --analyze-docs --filter-docs</code></pre>
+                  </div>
+                </div>
+                <div class="example-panel" data-example-panel="output">
+                  <div class="example-block output">
+                    <div class="example-label">Output</div>
+                    <pre><code>Document contains sensitive information: https://docs.example.com/finance/q2/board-report.pdf | Found bank account numbers and internal cost centers</code></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="example-card">
+              <div class="example-head">
+                <div>
+                  <div class="example-kicker">Interactive</div>
+                  <h3>Interactive mode</h3>
+                  <p>Launch the TUI for guided workflows and quick commands.</p>
+                </div>
+                <button class="btn ghost" data-copy>Copy</button>
+              </div>
+              <div class="example-tabs" data-example-tabs>
+                <button class="example-tab active" data-example-tab="command">Command</button>
+                <button class="example-tab" data-example-tab="output">Click to see the example output</button>
+              </div>
+              <div class="example-panels">
+                <div class="example-panel active" data-example-panel="command">
+                  <div class="example-block">
+                    <div class="example-label">Command</div>
+                    <pre data-copy-source><code>banshee --interactive</code></pre>
+                  </div>
+                </div>
+                <div class="example-panel" data-example-panel="output">
+                  <div class="example-block output">
+                    <div class="example-label">Output (abridged)</div>
+                    <pre><code>Good evening, operator | IP: 203.0.113.24 | Time: 19:44:12 | Session: SID-1234 | Status: READY
+Quick commands: /execute, /monitor, /exit</code></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="example-card">
+              <div class="example-head">
+                <div>
+                  <div class="example-kicker">Outputs</div>
+                  <h3>Append results to file</h3>
+                  <p>Use <code>-o</code> to append only new unique URLs to a file.</p>
+                </div>
+                <button class="btn ghost" data-copy>Copy</button>
+              </div>
+              <div class="example-tabs" data-example-tabs>
+                <button class="example-tab active" data-example-tab="command">Command</button>
+                <button class="example-tab" data-example-tab="output">Click to see the example output</button>
+              </div>
+              <div class="example-panels">
+                <div class="example-panel active" data-example-panel="command">
+                  <div class="example-block">
+                    <div class="example-label">Command</div>
+                    <pre data-copy-source><code>echo example.com | banshee -q "inurl:admin" -a -o results.txt</code></pre>
+                  </div>
+                </div>
+                <div class="example-panel" data-example-panel="output">
+                  <div class="example-block output">
+                    <div class="example-label">Output file (new lines only)</div>
+                    <pre><code>https://example.com/admin/login
+https://portal.example.com/admin/users</code></pre>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="features" class="section reveal" data-section>
+          <div class="section-head">
+            <h2>Feature Map</h2>
+            <p>All major features with the exact flags to enable them.</p>
+          </div>
+          <div class="feature-grid">
+            <div class="feature-card">
+              <h3>SMART chaining and optimization</h3>
+              <p>Generates follow-up dorks based on discovered assets and patterns.</p>
+              <div class="mini">
+                <span class="mini-label">Flags</span>
+                <div class="flag-pills">
+                  <span class="flag-pill">--smart</span>
+                  <span class="flag-pill">--suggestions</span>
+                  <span class="flag-pill">--no-followup</span>
+                  <span class="flag-pill">--max-followup</span>
+                  <span class="flag-pill">--correlation</span>
+                </div>
+              </div>
+            </div>
+            <div class="feature-card">
+              <h3>Learn mode intelligence</h3>
+              <p>Saves successful patterns and boosts future scans.</p>
+              <div class="mini">
+                <span class="mini-label">Flags</span>
+                <div class="flag-pills">
+                  <span class="flag-pill">--learn</span>
+                  <span class="flag-pill">--view-intel</span>
+                  <span class="flag-pill">--export-intel</span>
+                </div>
+              </div>
+            </div>
+            <div class="feature-card">
+              <h3>Research mode (OSINT)</h3>
+              <p>Pre-scan research to generate high-signal dorks.</p>
+              <div class="mini">
+                <span class="mini-label">Flags</span>
+                <div class="flag-pills">
+                  <span class="flag-pill">--research</span>
+                  <span class="flag-pill">--research-depth 1-4</span>
+                </div>
+              </div>
+            </div>
+            <div class="feature-card">
+              <h3>Multi-language dorking</h3>
+              <p>Detects target language and generates localized dorks.</p>
+              <div class="mini">
+                <span class="mini-label">Flags</span>
+                <div class="flag-pills">
+                  <span class="flag-pill">--multi-lang</span>
+                  <span class="flag-pill">--multi-lang-multiplier</span>
+                </div>
+              </div>
+            </div>
+            <div class="feature-card">
+              <h3>Wayback foresee mode</h3>
+              <p>Uses Wayback intelligence to map architecture and find hidden patterns.</p>
+              <div class="mini">
+                <span class="mini-label">Flags</span>
+                <div class="flag-pills">
+                  <span class="flag-pill">--foresee</span>
+                  <span class="flag-pill">--wmc</span>
+                  <span class="flag-pill">--no-wayback-cache</span>
+                  <span class="flag-pill">--clear-wayback-cache</span>
+                </div>
+              </div>
+            </div>
+            <div class="feature-card">
+              <h3>Tech detection and CVE mapping</h3>
+              <p>Detects stack, maps CVEs, and can generate CVE-specific dorks.</p>
+              <div class="mini">
+                <span class="mini-label">Flags</span>
+                <div class="flag-pills">
+                  <span class="flag-pill">--tech-detect</span>
+                  <span class="flag-pill">--update-cve-db</span>
+                  <span class="flag-pill">--ai-dork-generation</span>
+                </div>
+              </div>
+            </div>
+            <div class="feature-card">
+              <h3>Document analysis</h3>
+              <p>Downloads documents, extracts text, and uses AI to identify sensitive data.</p>
+              <div class="mini">
+                <span class="mini-label">Flags</span>
+                <div class="flag-pills">
+                  <span class="flag-pill">--analyze-docs</span>
+                  <span class="flag-pill">--filter-docs</span>
+                </div>
+              </div>
+            </div>
+            <div class="feature-card">
+              <h3>Response analysis</h3>
+              <p>Captures HTTP responses and analyzes them with AI.</p>
+              <div class="mini">
+                <span class="mini-label">Flags</span>
+                <div class="flag-pills">
+                  <span class="flag-pill">--dedupe</span>
+                  <span class="flag-pill">--analyze-responses</span>
+                  <span class="flag-pill">--analyze-response-only</span>
+                </div>
+              </div>
+            </div>
+            <div class="feature-card">
+              <h3>Inline code analysis</h3>
+              <p>Extracts inline JS from HTML and checks for risky patterns.</p>
+              <div class="mini">
+                <span class="mini-label">Flags</span>
+                <div class="flag-pills">
+                  <span class="flag-pill">--inline-code-analysis</span>
+                  <span class="flag-pill">--analyze-code-only</span>
+                </div>
+              </div>
+            </div>
+            <div class="feature-card">
+              <h3>Monitor cycles</h3>
+              <p>Schedules repeated dorking cycles and diffed results.</p>
+              <div class="mini">
+                <span class="mini-label">Flags</span>
+                <div class="flag-pills">
+                  <span class="flag-pill">--monitor</span>
+                  <span class="flag-pill">--monitor-time</span>
+                  <span class="flag-pill">--filter-mon</span>
+                  <span class="flag-pill">--analyze-mon</span>
+                </div>
+              </div>
+            </div>
+            <div class="feature-card">
+              <h3>Leak detection</h3>
+              <p>Scans paste sites for leaked credentials and secrets.</p>
+              <div class="mini">
+                <span class="mini-label">Flags</span>
+                <div class="flag-pills">
+                  <span class="flag-pill">--check-leaks</span>
+                  <span class="flag-pill">--keywords</span>
+                </div>
+              </div>
+            </div>
+            <div class="feature-card">
+              <h3>Rate control and budgets</h3>
+              <p>Adaptive throttling, scoring, and budget optimization for quotas.</p>
+              <div class="mini">
+                <span class="mini-label">Flags</span>
+                <div class="flag-pills">
+                  <span class="flag-pill">--adaptive</span>
+                  <span class="flag-pill">--scoring</span>
+                  <span class="flag-pill">--budget</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="analysis" class="section reveal" data-section>
+          <div class="section-head">
+            <h2>Analysis Pipeline</h2>
+            <p>Deep analysis options for documents, responses, and inline code.</p>
+          </div>
+          <div class="grid two">
+            <div class="card">
+              <h3>Document analysis</h3>
+              <ul>
+                <li>Supports PDF, DOCX, XLSX, PPTX, and text formats.</li>
+                <li>Uses AI to classify sensitive findings and store results in <code>sensitive-pdfs.txt</code>.</li>
+                <li>Use <code>--filter-docs</code> to remove non-sensitive docs from output.</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>Response analysis</h3>
+              <ul>
+                <li>Collects HTTP responses for discovered URLs.</li>
+                <li>Requires <code>--dedupe</code> to avoid duplicates.</li>
+                <li>AI summarizes secrets, admin endpoints, and risky patterns.</li>
+                <li>Use <code>--analyze-response-only</code> for direct URLs from stdin.</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>Inline code analysis</h3>
+              <ul>
+                <li>Extracts inline JS and DOM handlers for XSS risk signals.</li>
+                <li>Requires AI mode (<code>-ai</code>, <code>-random</code>, <code>--smart</code>, or <code>--learn</code>).</li>
+                <li>Cannot be combined with <code>--analyze-docs</code> or <code>--analyze-response-only</code>.</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>Code-only analysis</h3>
+              <ul>
+                <li>Pipe code directly to Banshee for AI review.</li>
+                <li>Use <code>--analyze-code-only</code> to bypass dorking.</li>
+              </ul>
+              <pre><code>cat script.js | banshee --analyze-code-only --model gemini-2.0-flash-exp</code></pre>
+            </div>
+          </div>
+        </section>
+
+        <section id="monitoring" class="section reveal" data-section>
+          <div class="section-head">
+            <h2>Monitoring and Automation</h2>
+            <p>Continuous recon with dedupe, diffing, and AI analysis.</p>
+          </div>
+          <div class="grid two">
+            <div class="card">
+              <h3>Monitor mode</h3>
+              <p>Provide an intent string and Banshee will continuously run dorks on a schedule.</p>
+              <ul>
+                <li><code>--monitor "intent"</code> starts the scheduler.</li>
+                <li><code>--monitor-time</code> sets cycle interval (minutes).</li>
+                <li><code>--filter-mon</code> dedupes URLs across cycles.</li>
+                <li><code>--analyze-mon</code> turns on doc + response analysis per cycle.</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>Monitor examples</h3>
+              <pre><code>cat domains.txt | banshee --monitor "sensitive pdf" --monitor-time 45
+cat domains.txt | banshee --monitor "api tokens" --filter-mon --analyze-mon
+</code></pre>
+              <p>Monitor mode is compatible with AI, SMART, LEARN, research, and multi-lang flows.</p>
+            </div>
+          </div>
+        </section>
+
+        <section id="intelligence" class="section reveal" data-section>
+          <div class="section-head">
+            <h2>Intelligence and Learning</h2>
+            <p>Persistent intelligence increases accuracy with every run.</p>
+          </div>
+          <div class="grid two">
+            <div class="card">
+              <h3>Learn mode</h3>
+              <ul>
+                <li>Stores successful URLs, detected tech, paths, and patterns.</li>
+                <li>Improves SMART follow-ups and AI dork generation.</li>
+                <li>Use <code>--view-intel</code> to inspect intelligence per target.</li>
+                <li>Use <code>--export-intel</code> to save JSON snapshots.</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>Wayback foresee</h3>
+              <ul>
+                <li>Queries the Wayback Machine for historical URLs.</li>
+                <li>Extracts subdomains, parameters, file patterns, and admin paths.</li>
+                <li>Controls cache with <code>--no-wayback-cache</code> or <code>--clear-wayback-cache</code>.</li>
+                <li>Optional status code filters via <code>--wmc</code>.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section id="internal-files" class="section reveal" data-section>
+          <div class="section-head">
+            <h2>Internal Files</h2>
+            <p>What Banshee writes to disk, why it matters, and how each file is used.</p>
+          </div>
+          <div class="file-grid">
+            <div class="file-panel">
+              <div class="file-panel-head">
+                <div class="file-badge">INTEL</div>
+                <div>
+                  <h3>Learning + intelligence</h3>
+                  <p>Persistent signals used by SMART, learn mode, and Wayback.</p>
+                </div>
+              </div>
+              <div class="file-list">
+                <div class="file-item">
+                  <div class="file-path">~/.config/banshee/.intel/&lt;target-hash&gt;.json</div>
+                  <div class="file-desc">Per-target intelligence for learn mode, view, and export.</div>
+                </div>
+                <div class="file-item">
+                  <div class="file-path">~/.config/banshee/successful.txt</div>
+                  <div class="file-desc">Seeds SMART pattern learning with confirmed high-value URLs.</div>
+                </div>
+                <div class="file-item">
+                  <div class="file-path">~/.config/banshee/sensitive-pdfs.txt</div>
+                  <div class="file-desc">Sensitive document log with timestamps, summaries, and details.</div>
+                </div>
+                <div class="file-item">
+                  <div class="file-path">~/.config/banshee/.intel/&lt;domain&gt;_wayback.json</div>
+                  <div class="file-desc">Processed Wayback intelligence for historical patterns.</div>
+                </div>
+              </div>
+            </div>
+            <div class="file-panel">
+              <div class="file-panel-head">
+                <div class="file-badge">CACHE</div>
+                <div>
+                  <h3>Caches</h3>
+                  <p>Performance boosters that reduce repeated requests and AI calls.</p>
+                </div>
+              </div>
+              <div class="file-list">
+                <div class="file-item">
+                  <div class="file-path">~/.config/banshee/.ai_cache.json</div>
+                  <div class="file-desc">AI response cache (24 hour TTL) for prompt reuse.</div>
+                </div>
+                <div class="file-item">
+                  <div class="file-path">~/.config/banshee/research-cache.json</div>
+                  <div class="file-desc">OSINT research cache used by <code>--research</code>.</div>
+                </div>
+                <div class="file-item">
+                  <div class="file-path">~/.config/banshee/.wayback_cache/&lt;domain_hash&gt;.json</div>
+                  <div class="file-desc">Raw Wayback cache to reduce API load.</div>
+                </div>
+                <div class="file-item">
+                  <div class="file-path">~/.config/banshee/.response_cache/&lt;url_hash&gt;.json</div>
+                  <div class="file-desc">Response analysis cache controlled by config TTL.</div>
+                </div>
+              </div>
+            </div>
+            <div class="file-panel">
+              <div class="file-panel-head">
+                <div class="file-badge">CTRL</div>
+                <div>
+                  <h3>Operational control files</h3>
+                  <p>Settings and scope controls to keep runs precise.</p>
+                </div>
+              </div>
+              <div class="file-list">
+                <div class="file-item">
+                  <div class="file-path">~/.config/banshee/.config</div>
+                  <div class="file-desc">Default settings; CLI flags override this file.</div>
+                </div>
+                <div class="file-item">
+                  <div class="file-path">~/.config/banshee/oos.txt</div>
+                  <div class="file-desc">Out-of-scope patterns and wildcards.</div>
+                </div>
+                <div class="file-item">
+                  <div class="file-path">~/.config/banshee/.ignore.file</div>
+                  <div class="file-desc">Random dork history to prevent duplicates.</div>
+                </div>
+                <div class="file-item">
+                  <div class="file-path">Tip</div>
+                  <div class="file-desc">Delete caches to force refresh; recreate key files if removed.</div>
+                </div>
+              </div>
+            </div>
+            <div class="file-panel">
+              <div class="file-panel-head">
+                <div class="file-badge">KEYS</div>
+                <div>
+                  <h3>API key files</h3>
+                  <p>Key stores for search engines and AI tooling.</p>
+                </div>
+              </div>
+              <div class="file-list">
+                <div class="file-item">
+                  <div class="file-path">~/.config/banshee/keys.txt</div>
+                  <div class="file-desc">Google CSE API keys (one per line, no comments).</div>
+                </div>
+                <div class="file-item">
+                  <div class="file-path">~/.config/banshee/brave-keys.txt</div>
+                  <div class="file-desc">Brave tokens (one per line, no comments).</div>
+                </div>
+                <div class="file-item">
+                  <div class="file-path">~/.config/banshee/gemini-api-key.txt</div>
+                  <div class="file-desc">Gemini keys with comments; first valid key is used.</div>
+                </div>
+                <div class="file-item">
+                  <div class="file-path">~/.config/banshee/nvd-api-key.txt</div>
+                  <div class="file-desc">NVD API key for CVE updates.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="configuration" class="section reveal" data-section>
+          <div class="section-head">
+            <h2>Configuration</h2>
+            <p>Defaults live in <code>~/.config/banshee/.config</code>. CLI flags override config values.</p>
+          </div>
+          <div class="code-card">
+            <div class="code-head">
+              <div>
+                <h3>Example config snippet</h3>
+                <p>Only key lines shown here. The file is fully commented by default.</p>
+              </div>
+              <button class="btn ghost" data-copy>Copy</button>
+            </div>
+            <pre><code>engine=both
+verbose=false
+recursive=false
+insecure=false
+pages=10
+delay=0
+workers=5
+quantity=10
+monitor-time=60
+oos-file=~/.config/banshee/oos.txt
+model=
+simplify=false
+multi-lang-multiplier=25
+research=false
+research-depth=1
+learn=false
+smart=false
+smart-timeout=150
+suggestions=false
+no-followup=false
+max-followup=5
+correlation=false
+max-correlation=10
+waf-bypass=false
+save=false
+include-dates=false
+tech-detect=false
+adaptive=true
+deep=false
+scoring=false
+budget=false
+flush=false
+</code></pre>
+          </div>
+        </section>
+
+        <section id="outputs" class="section reveal" data-section>
+          <div class="section-head">
+            <h2>Outputs and Caches</h2>
+            <p>Where Banshee writes intelligence, analysis, and history.</p>
+          </div>
+          <div class="grid two">
+            <div class="card">
+              <h3>Result output</h3>
+              <ul>
+                <li>Without <code>-o</code>, unique URLs are printed to stdout (sorted).</li>
+                <li>With <code>-o</code>, Banshee appends only new unique URLs (anew style).</li>
+                <li>The output file is created if missing; use <code>-v</code> to log preloaded URLs.</li>
+                <li>Ideal for long-running or repeated scans where you want one growing, de-duplicated file.</li>
+                <li><code>--no-colors</code> produces clean output for piping into other tools.</li>
+                <li><code>--export-intel</code> writes a JSON snapshot; <code>--view-intel</code> prints to stdout.</li>
+              </ul>
+            </div>
+            <div class="card">
+              <h3>Analysis artifacts</h3>
+              <ul>
+                <li>Document analysis logs sensitive hits to <code>sensitive-pdfs.txt</code>.</li>
+                <li>Learn mode stores per-target intelligence and upgrades future scans.</li>
+                <li>SMART uses <code>successful.txt</code> patterns to generate focused dorks.</li>
+              </ul>
+              <p>See Internal Files for full paths and formats.</p>
+            </div>
+            <div class="card">
+              <h3>Cache behavior</h3>
+              <ul>
+                <li>AI responses are cached to reduce repeated prompts (default 24 hour TTL).</li>
+                <li>Wayback caches reduce API load; TTL is configurable in <code>~/.config/banshee/.config</code>.</li>
+                <li>Clear caches when you need a full refresh of results.</li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+        <section id="reference" class="section reveal" data-section>
+          <div class="section-head">
+            <h2>Flag Reference</h2>
+            <p>Filter by keyword to find a flag quickly.</p>
+          </div>
+          <div class="filter-bar">
+            <input type="search" placeholder="Search flags..." data-filter-input />
+            <div class="filter-hint">Try: monitor, ai, dedupe, wayback, docs</div>
+          </div>
+          <div class="flag-detail" data-flag-detail aria-hidden="true" role="dialog" aria-modal="true">
+            <div class="terminal flag-detail-card">
+              <div class="terminal-head">
+                <span class="terminal-dot terminal-dot--close" aria-hidden="true"></span>
+                <span class="terminal-dot" aria-hidden="true"></span>
+                <span class="terminal-dot" aria-hidden="true"></span>
+                <button class="flag-detail-close" type="button" data-flag-close aria-label="Close flag detail">Close</button>
+              </div>
+              <div class="flag-detail-body">
+                <div class="flag-detail-header">
+                  <h3 class="flag-detail-title" data-flag-title>Flag details</h3>
+                  <p class="flag-detail-summary" data-flag-summary>Select a flag to see usage details.</p>
+                </div>
+                <div class="flag-detail-grid">
+                  <div>
+                    <div class="flag-detail-label">Usage</div>
+                    <pre class="flag-detail-code" data-flag-usage></pre>
+                  </div>
+                  <div>
+                    <div class="flag-detail-label">How it works</div>
+                    <ul class="flag-detail-list" data-flag-details></ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="flag-list">
+            <div class="flag-group" data-filter-item="core">
+              <h3>Core</h3>
+              <div class="flag-row" data-filter-item="-h --help">-h, --help <span>Show help</span></div>
+              <div class="flag-row" data-filter-item="-p --pages">-p, --pages <span>Pages per query</span></div>
+              <div class="flag-row" data-filter-item="-d --delay">-d, --delay <span>Delay between requests</span></div>
+              <div class="flag-row" data-filter-item="--workers">--workers <span>Parallel worker count</span></div>
+              <div class="flag-row" data-filter-item="-v --verbose">-v, --verbose <span>Verbose logging</span></div>
+              <div class="flag-row" data-filter-item="-o --output">-o, --output <span>Write unique URLs to file</span></div>
+              <div class="flag-row" data-filter-item="-engine">-engine <span>both, google, brave</span></div>
+              <div class="flag-row" data-filter-item="--model">--model <span>AI model override</span></div>
+            </div>
+            <div class="flag-group" data-filter-item="search">
+              <h3>Search and Scope</h3>
+              <div class="flag-row" data-filter-item="-q --query">-q, --query <span>Custom dork or file of dorks</span></div>
+              <div class="flag-row" data-filter-item="-e --extensions">-e, --extensions <span>Extensions or file</span></div>
+              <div class="flag-row" data-filter-item="-w --word">-w, --word <span>Dictionary paths or file</span></div>
+              <div class="flag-row" data-filter-item="-c --contents">-c, --contents <span>Search file contents</span></div>
+              <div class="flag-row" data-filter-item="-x --exclusions">-x, --exclusions <span>Exclude targets</span></div>
+              <div class="flag-row" data-filter-item="--oos-file">--oos-file <span>Out of scope patterns</span></div>
+              <div class="flag-row" data-filter-item="-a --recursive">-a, --recursive <span>Include subdomains</span></div>
+              <div class="flag-row" data-filter-item="-s --subdomains">-s, --subdomains <span>Subdomain enumeration</span></div>
+              <div class="flag-row" data-filter-item="--find-apex">--find-apex <span>Resolve tenant apex domains</span></div>
+              <div class="flag-row" data-filter-item="-deep">-deep <span>Recursive subdomain discovery</span></div>
+              <div class="flag-row" data-filter-item="-save">-save <span>Stop pagination on low yield</span></div>
+              <div class="flag-row" data-filter-item="-include-dates">-include-dates <span>Add date operators</span></div>
+            </div>
+            <div class="flag-group" data-filter-item="ai">
+              <h3>AI and Random</h3>
+              <div class="flag-row" data-filter-item="-ai">-ai <span>AI prompt for dork generation</span></div>
+              <div class="flag-row" data-filter-item="-random">-random <span>Generate random dorks (focus)</span></div>
+              <div class="flag-row" data-filter-item="-quantity">-quantity <span>Dorks to generate</span></div>
+              <div class="flag-row" data-filter-item="-ignore-file">-ignore-file <span>Ignore dorks from file</span></div>
+              <div class="flag-row" data-filter-item="-flush">-flush <span>Ignore ignore-file</span></div>
+              <div class="flag-row" data-filter-item="-simplify">-simplify <span>Simplify AI prompts</span></div>
+            </div>
+            <div class="flag-group" data-filter-item="smart">
+              <h3>SMART and Learn</h3>
+              <div class="flag-row" data-filter-item="-smart">-smart <span>Context-aware dork chaining</span></div>
+              <div class="flag-row" data-filter-item="--suggestions">--suggestions <span>Show optimization ideas</span></div>
+              <div class="flag-row" data-filter-item="--no-followup">--no-followup <span>Disable follow-up dorks</span></div>
+              <div class="flag-row" data-filter-item="--max-followup">--max-followup <span>Limit follow-up dorks</span></div>
+              <div class="flag-row" data-filter-item="-correlation">-correlation <span>Layered correlation analysis</span></div>
+              <div class="flag-row" data-filter-item="-max-correlation">-max-correlation <span>Limit correlation dorks</span></div>
+              <div class="flag-row" data-filter-item="-learn">-learn <span>Persist intelligence</span></div>
+              <div class="flag-row" data-filter-item="-waf-bypass">-waf-bypass <span>Obfuscated dorks</span></div>
+            </div>
+            <div class="flag-group" data-filter-item="research">
+              <h3>Research and Language</h3>
+              <div class="flag-row" data-filter-item="-research">-research <span>OSINT research mode</span></div>
+              <div class="flag-row" data-filter-item="-research-depth">-research-depth <span>Depth 1-4</span></div>
+              <div class="flag-row" data-filter-item="--multi-lang">--multi-lang <span>Target language dorks</span></div>
+              <div class="flag-row" data-filter-item="--multi-lang-multiplier">--multi-lang-multiplier <span>Language mix percent</span></div>
+            </div>
+            <div class="flag-group" data-filter-item="analysis">
+              <h3>Analysis</h3>
+              <div class="flag-row" data-filter-item="--dedupe">--dedupe <span>Intelligent deduplication</span></div>
+              <div class="flag-row" data-filter-item="--analyze-responses">--analyze-responses <span>AI response analysis</span></div>
+              <div class="flag-row" data-filter-item="--analyze-response-only">--analyze-response-only <span>Analyze stdin URLs</span></div>
+              <div class="flag-row" data-filter-item="--analyze-docs">--analyze-docs <span>Document analysis</span></div>
+              <div class="flag-row" data-filter-item="--filter-docs">--filter-docs <span>Filter safe docs</span></div>
+              <div class="flag-row" data-filter-item="--inline-code-analysis">--inline-code-analysis <span>Inline JS analysis</span></div>
+              <div class="flag-row" data-filter-item="--analyze-code-only">--analyze-code-only <span>Analyze stdin code</span></div>
+            </div>
+            <div class="flag-group" data-filter-item="monitor">
+              <h3>Monitor and Automation</h3>
+              <div class="flag-row" data-filter-item="--monitor">--monitor <span>Monitor intent string</span></div>
+              <div class="flag-row" data-filter-item="--monitor-time">--monitor-time <span>Minutes between cycles</span></div>
+              <div class="flag-row" data-filter-item="--filter-mon">--filter-mon <span>Deduplicate across cycles</span></div>
+              <div class="flag-row" data-filter-item="--analyze-mon">--analyze-mon <span>Analyze in monitor mode</span></div>
+            </div>
+            <div class="flag-group" data-filter-item="wayback">
+              <h3>Wayback Foresee</h3>
+              <div class="flag-row" data-filter-item="--foresee">--foresee <span>Wayback intelligence</span></div>
+              <div class="flag-row" data-filter-item="--wmc">--wmc <span>Status code filter</span></div>
+              <div class="flag-row" data-filter-item="--no-wayback-cache">--no-wayback-cache <span>Skip cache</span></div>
+              <div class="flag-row" data-filter-item="--auto-cleanup-cache">--auto-cleanup-cache <span>Auto-remove old cache</span></div>
+              <div class="flag-row" data-filter-item="--clear-wayback-cache">--clear-wayback-cache <span>Clear cache</span></div>
+            </div>
+            <div class="flag-group" data-filter-item="cve">
+              <h3>CVE Database</h3>
+              <div class="flag-row" data-filter-item="--update-cve-db">--update-cve-db <span>Update CVE database</span></div>
+              <div class="flag-row" data-filter-item="--cve-year">--cve-year <span>Filter by year</span></div>
+              <div class="flag-row" data-filter-item="--severity">--severity <span>Filter by severity</span></div>
+              <div class="flag-row" data-filter-item="--cve-results-per-page">--cve-results-per-page <span>NVD page size</span></div>
+              <div class="flag-row" data-filter-item="--ai-dork-generation">--ai-dork-generation <span>AI CVE dorks</span></div>
+              <div class="flag-row" data-filter-item="--nvd-api-key">--nvd-api-key <span>NVD API key</span></div>
+              <div class="flag-row" data-filter-item="--view-intel">--view-intel <span>View saved intelligence</span></div>
+              <div class="flag-row" data-filter-item="--export-intel">--export-intel <span>Export intelligence JSON</span></div>
+            </div>
+            <div class="flag-group" data-filter-item="network">
+              <h3>Network and Proxy</h3>
+              <div class="flag-row" data-filter-item="-r --proxy">-r, --proxy <span>HTTP or SOCKS proxy</span></div>
+              <div class="flag-row" data-filter-item="-insecure">-insecure <span>Skip TLS validation</span></div>
+              <div class="flag-row" data-filter-item="-adaptive">-adaptive <span>Adaptive delay control</span></div>
+            </div>
+            <div class="flag-group" data-filter-item="misc">
+              <h3>Misc</h3>
+              <div class="flag-row" data-filter-item="-tech-detect">-tech-detect <span>Wappalyzer fingerprinting</span></div>
+              <div class="flag-row" data-filter-item="-scoring">-scoring <span>AI scoring</span></div>
+              <div class="flag-row" data-filter-item="-budget">-budget <span>Predict dork success</span></div>
+              <div class="flag-row" data-filter-item="-check-leaks">-check-leaks <span>Paste site leak scan</span></div>
+              <div class="flag-row" data-filter-item="-keywords">-keywords <span>Leak search keywords</span></div>
+              <div class="flag-row" data-filter-item="--interactive">--interactive <span>Interactive TUI</span></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="faq" class="section reveal" data-section>
+          <div class="section-head">
+            <h2>FAQ</h2>
+            <p>Answers to common operational questions.</p>
+          </div>
+          <div class="faq">
+            <details>
+              <summary>Why am I seeing no results?</summary>
+              <p>Check API keys, ensure targets are provided via stdin, and verify out-of-scope filters are not too strict. Use <code>-v</code> to inspect query behavior.</p>
+            </details>
+            <details>
+              <summary>Do I need both Google and Brave keys?</summary>
+              <p>No. Use one engine at a time with <code>-engine</code>. If both keys are available, Banshee will use both.</p>
+            </details>
+            <details>
+              <summary>Why does --analyze-responses require --dedupe?</summary>
+              <p>Response analysis is expensive. Deduplication prevents repeated analysis of similar endpoints and reduces AI token usage.</p>
+            </details>
+            <details>
+              <summary>How do I speed up scanning?</summary>
+              <p>Increase <code>--workers</code>, reduce <code>--delay</code> (or keep <code>delay=0</code> with <code>--adaptive</code>), and use <code>--save</code> to stop low-yield pagination.</p>
+            </details>
+            <details>
+              <summary>Where are the caches and intelligence files stored?</summary>
+              <p>Everything lives under <code>~/.config/banshee</code>. See Internal Files for the full list; caches can be deleted to force a refresh.</p>
+            </details>
+            <details>
+              <summary>How should I use successful.txt?</summary>
+              <p>Add one URL per line (start with <code>http</code>), optionally with notes after the URL. Banshee ignores lines starting with <code>#</code> and uses the file for SMART pattern learning. Clear the file or skip SMART mode if you do not want it applied.</p>
+            </details>
+            <details>
+              <summary>How do I run a TLD mass scan?</summary>
+              <p>Provide a TLD via stdin (for example <code>echo .gov | banshee --tech-detect</code>). Banshee will discover domains and run tech detection.</p>
+            </details>
+          </div>
+        </section>
+
+        <section id="eula" class="section reveal" data-section>
+          <div class="section-head">
+            <h2>End User License Agreement (EULA)</h2>
+            <p>Read this carefully before using Banshee. By using the tool, you agree to these terms.</p>
+          </div>
+          <div class="grid two">
+            <article class="card">
+              <h3>License</h3>
+              <p>Banshee is provided for personal, educational, and authorized security testing. You may install and use it for lawful assessments where you have explicit permission.</p>
+            </article>
+            <article class="card">
+              <h3>Restrictions</h3>
+              <p>You must not use Banshee to target systems without authorization, violate laws, or bypass access controls. Automated scanning must respect rate limits and program scope rules.</p>
+            </article>
+            <article class="card">
+              <h3>Data Responsibility</h3>
+              <p>You are responsible for securing output data, API keys, and any intelligence gathered. Do not store sensitive findings in public or shared locations.</p>
+            </article>
+            <article class="card">
+              <h3>Warranty Disclaimer</h3>
+              <p>Banshee is provided "as is" without warranties of any kind. Results may be incomplete, noisy, or inaccurate.</p>
+            </article>
+            <article class="card">
+              <h3>Limitation of Liability</h3>
+              <p>The authors and organization are not liable for any direct or indirect damages arising from use or misuse of this tool.</p>
+            </article>
+            <article class="card">
+              <h3>Termination</h3>
+              <p>Violation of these terms immediately terminates your license to use Banshee. Continued use after termination is prohibited.</p>
+            </article>
+          </div>
+          <p class="section-note">This tool is intended for educational purposes and authorized red teaming only. If you do not agree to these terms, do not use Banshee.</p>
+        </section>
+      </main>
+    </div>
+    <button class="toc-reveal" type="button" data-dock-show aria-controls="toc-dock" aria-expanded="false" aria-label="Show navigation dock">Show Dock</button>
+
+    <footer class="footer">
+      <div>
+        <strong>Banshee Documentation</strong>
+        <span>Operational guide for advanced OSINT and dorking.</span>
+        <span>Support: gorkem@cyberpars.com</span>
+        <span>Disclaimer: Use this tool responsibly. I and my organization are not responsible for any damage or misuse. Banshee is for educational and authorized red teaming purposes only.</span>
+      </div>
+      <a class="btn ghost" href="#overview" data-scroll-top>Back to top</a>
+    </footer>
+
+    <script src="docs.js"></script>
+  </body>
+</html>
