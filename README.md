@@ -10,7 +10,7 @@ It is not the full manual.
 
 For the complete flag reference, workflow explanations, internal files/caches, outputs, FAQ, and more detailed examples, use the documentation page:
 
-- `vulnpire.github.io/banshee-ai/web/docs.html`
+- `https://vulnpire.github.io/Banshee-AI`
 - Local copy: `web/docs.html`
 
 The docs interface also includes a simulated Banshee shell with a virtual `banshee` binary and a very basic CTF for learning/demo purposes.
