@@ -1,4 +1,4 @@
-module banshee
+module github.com/Vulnpire/banshee-ai
 
 go 1.24.5
 
