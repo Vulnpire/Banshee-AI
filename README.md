@@ -52,7 +52,7 @@ At a high level, Banshee helps you:
 - Use technology detection and CVE-aware logic for better targeting
 - Scale to multiple targets using stdin and file-based workflows
 
-Banshee is especially useful when you want to:
+ is especially useful when you want to:
 
 - Search for exposed documents across a target's indexed footprint
 - Hunt for leaked configuration files and secrets
@@ -62,7 +62,7 @@ Banshee is especially useful when you want to:
 
 ## Why a Docs-First Approach
 
-Banshee has grown into a broad toolkit.
+ has grown into a broad toolkit.
 
 A single README that tries to cover everything becomes hard to maintain and hard to read.
 
@@ -81,7 +81,7 @@ Use the docs page as your main reference.
 
 ## Feature Overview (Short Version)
 
-Banshee includes support for workflows such as:
+ includes support for workflows such as:
 
 - AI dork generation from prompts
 - Random dork generation by category
@@ -102,7 +102,7 @@ This is only a summary.
 
 For full feature coverage, use:
 
-- `https://vulnpire.github.io/Banshee-AI`
+- `https://vulnpire.github.io/-AI`
 - `docs/index.html`
 
 ## Requirements
@@ -140,7 +140,7 @@ You will typically need:
 ### Option 1: Install with Go
 
 ```bash
-go install -v github.com/Vulnpire/Banshee-AI@latest
+GOPROXY=direct go install -v github.com/Vulnpire/Banshee-AI/cmd/banshee@main
 ```
 
 After install, make sure your Go bin path is in `PATH`.
