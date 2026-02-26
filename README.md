@@ -10,8 +10,8 @@ It is not the full manual.
 
 For the complete flag reference, workflow explanations, internal files/caches, outputs, FAQ, and more detailed examples, use the documentation page:
 
-- `vulnpire.github.io/banshee-ai/web/docs.html`
-- Local copy: `web/docs.html`
+- `https://vulnpire.github.io/Banshee-AI`
+- Local copy: `docs/index.html`
 
 The docs interface also includes a simulated Banshee shell with a virtual `banshee` binary and a very basic CTF for learning/demo purposes.
 
@@ -37,8 +37,8 @@ This README intentionally does not try to fully cover:
 
 For those, use the docs site:
 
-- `vulnpire.github.io/banshee-ai/docs.html`
-- `web/docs.html`
+- `https://vulnpire.github.io/Banshee-AI`
+- `docs/index.html`
 
 ## What Banshee Does
 
@@ -102,8 +102,8 @@ This is only a summary.
 
 For full feature coverage, use:
 
-- `example.com`
-- `web/docs.html`
+- `https://vulnpire.github.io/Banshee-AI`
+- `docs/index.html`
 
 ## Requirements
 
@@ -140,7 +140,7 @@ You will typically need:
 ### Option 1: Install with Go
 
 ```bash
-go install -v <gh_repo>
+go install -v github.com/Vulnpire/Banshee-AI@latest
 ```
 
 After install, make sure your Go bin path is in `PATH`.
@@ -197,8 +197,8 @@ The exact paths and formats may vary by feature and version.
 
 Use the docs page for authoritative details:
 
-- `example.com`
-- `web/docs.html`
+- `https://vulnpire.github.io/Banshee-AI`
+- `docs/index.html`
 
 ### Common Configuration Concepts
 
@@ -538,8 +538,8 @@ The exact flags and advanced combinations are documented in the web interface.
 
 For detailed setup and usage examples, use:
 
-- `example.com`
-- `web/docs.html`
+- `https://vulnpire.github.io/Banshee-AI`
+- `docs/index.html`
 
 ## TLD-Scale and Multi-Target Scanning (High Level)
 
@@ -652,12 +652,12 @@ Banshee ships with a web documentation interface in the `web/` directory.
 Open it locally:
 
 ```bash
-xdg-open web/docs.html
+xdg-open docs/index.html
 ```
 
 Or use the hosted version:
 
-- `example.com`
+- `https://vulnpire.github.io/Banshee-AI`
 
 ### What the Web Docs Include
 
@@ -701,7 +701,7 @@ The simulated shell includes a virtual `banshee` binary and a very basic CTF flo
 
 ## Suggested Learning Path (New Users)
 
-1. Open `web/docs.html` or `example.com` and skim the Quickstart section.
+1. Open `docs/index.html` or `https://vulnpire.github.io/Banshee-AI` and skim the Quickstart section.
 2. Run `banshee --help` locally to confirm installation.
 3. Try one traditional dork (`-q`) on a test target you are authorized to assess.
 4. Try one AI prompt (`-ai`) with low quantity.
@@ -821,7 +821,7 @@ No.
 
 This README is a practical getting-started guide.
 
-Use `example.com` or `web/docs.html` for full documentation.
+Use `https://vulnpire.github.io/Banshee-AI` or `docs/index.html` for full documentation.
 
 ### Can I learn Banshee without installing it first?
 
@@ -841,8 +841,8 @@ It is a JavaScript simulation for learning and demos.
 
 Use the web docs reference section:
 
-- `example.com`
-- `web/docs.html`
+- `https://vulnpire.github.io/Banshee-AI`
+- `docs/index.html`
 
 ### Where do I find output/cache/internal file explanations?
 
@@ -924,7 +924,7 @@ Use the web docs for the full picture.
 
 Primary docs:
 
-- `example.com`
-- `web/docs.html`
+- `https://vulnpire.github.io/Banshee-AI`
+- `docs/index.html`
 
 Stay within scope.
