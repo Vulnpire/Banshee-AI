@@ -11,8 +11,8 @@ import (
 	"strconv"
 	"strings"
 
-	"banshee/internal/app/console"
-	"banshee/internal/app/core"
+	"github.com/Vulnpire/Banshee-AI/internal/app/console"
+	"github.com/Vulnpire/Banshee-AI/internal/app/core"
 )
 
 // detectTargetLanguage detects the primary language of the target website

@@ -1,8 +1,8 @@
 package ai
 
 import (
-	"banshee/internal/app/core"
-	"banshee/internal/app/tech"
+	"github.com/Vulnpire/Banshee-AI/internal/app/core"
+	"github.com/Vulnpire/Banshee-AI/internal/app/tech"
 )
 
 type SuccessfulURLInfo = core.SuccessfulURLInfo

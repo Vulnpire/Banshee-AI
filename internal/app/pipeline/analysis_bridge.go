@@ -1,6 +1,6 @@
 package pipeline
 
-import "banshee/internal/app/analysis"
+import "github.com/Vulnpire/Banshee-AI/internal/app/analysis"
 
 func filterDocumentAnalysisURLs(urls []string) []string {
 	return analysis.FilterDocumentAnalysisURLs(urls)

@@ -1,5 +1,5 @@
 package tech
 
-import "banshee/internal/app/cve"
+import "github.com/Vulnpire/Banshee-AI/internal/app/cve"
 
 type CVEEntry = cve.CVEEntry

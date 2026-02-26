@@ -4,8 +4,8 @@ import (
 	"context"
 	"net/http"
 
-	"banshee/internal/app/core"
-	"banshee/internal/app/cve"
+	"github.com/Vulnpire/Banshee-AI/internal/app/core"
+	"github.com/Vulnpire/Banshee-AI/internal/app/cve"
 )
 
 func DetectTechnologies(cfg *core.Config, ctx context.Context) []TechDetectionResult {

@@ -3,7 +3,7 @@ package ai
 import (
 	"context"
 
-	"banshee/internal/app/core"
+	"github.com/Vulnpire/Banshee-AI/internal/app/core"
 )
 
 func AnalyzeResultsForFollowUp(cfg *core.Config, ctx context.Context, results []string, prompt string) []string {

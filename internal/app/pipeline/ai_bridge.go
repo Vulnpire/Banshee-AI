@@ -1,6 +1,6 @@
 package pipeline
 
-import "banshee/internal/app/ai"
+import "github.com/Vulnpire/Banshee-AI/internal/app/ai"
 
 func addDateOperators(dork string, timeline *ai.CompanyTimeline) string {
 	return ai.AddDateOperators(dork, timeline)

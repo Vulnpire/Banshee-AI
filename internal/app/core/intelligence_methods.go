@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 	"time"
 
-	"banshee/internal/app/console"
+	"github.com/Vulnpire/Banshee-AI/internal/app/console"
 )
 
 // isDataFresh checks if a specific data type is still fresh based on TTL.

@@ -3,13 +3,13 @@ package pipeline
 import (
 	"context"
 
-	"banshee/internal/app/ai"
-	"banshee/internal/app/analysis"
-	"banshee/internal/app/core"
-	"banshee/internal/app/cve"
-	"banshee/internal/app/search"
-	"banshee/internal/app/tech"
-	"banshee/internal/app/tenant"
+	"github.com/Vulnpire/Banshee-AI/internal/app/ai"
+	"github.com/Vulnpire/Banshee-AI/internal/app/analysis"
+	"github.com/Vulnpire/Banshee-AI/internal/app/core"
+	"github.com/Vulnpire/Banshee-AI/internal/app/cve"
+	"github.com/Vulnpire/Banshee-AI/internal/app/search"
+	"github.com/Vulnpire/Banshee-AI/internal/app/tech"
+	"github.com/Vulnpire/Banshee-AI/internal/app/tenant"
 )
 
 func (c *Config) analyzeDocumentForSensitiveInfo(ctx context.Context, url string) {

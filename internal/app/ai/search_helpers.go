@@ -3,7 +3,7 @@ package ai
 import (
 	"context"
 
-	"banshee/internal/app/search"
+	"github.com/Vulnpire/Banshee-AI/internal/app/search"
 )
 
 func detectCloudIntentWithAI(ctx context.Context, prompt, model string) bool {

@@ -1,8 +1,8 @@
 package pipeline
 
 import (
-	"banshee/internal/app/core"
-	"banshee/internal/app/intel"
+	"github.com/Vulnpire/Banshee-AI/internal/app/core"
+	"github.com/Vulnpire/Banshee-AI/internal/app/intel"
 )
 
 func updateIntelligenceWithResults(intelData *core.TargetIntelligence, dorks []string, results map[string][]string) {

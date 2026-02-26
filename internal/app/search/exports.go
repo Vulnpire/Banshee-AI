@@ -4,7 +4,7 @@ import (
 	"context"
 	"net/http"
 
-	"banshee/internal/app/core"
+	"github.com/Vulnpire/Banshee-AI/internal/app/core"
 )
 
 func BuildExclusions(exclusions string, multiline bool) string {

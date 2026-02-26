@@ -3,7 +3,7 @@ package tenant
 import (
 	"context"
 
-	"banshee/internal/app/core"
+	"github.com/Vulnpire/Banshee-AI/internal/app/core"
 )
 
 func ResolveApexTargets(cfg *core.Config, ctx context.Context, targets []string) ([]string, error) {

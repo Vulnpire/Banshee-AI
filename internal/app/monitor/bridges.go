@@ -3,8 +3,8 @@ package monitor
 import (
 	"context"
 
-	"banshee/internal/app/ai"
-	"banshee/internal/app/pipeline"
+	"github.com/Vulnpire/Banshee-AI/internal/app/ai"
+	"github.com/Vulnpire/Banshee-AI/internal/app/pipeline"
 )
 
 func (c *Config) detectTargetLanguage(ctx context.Context) string {

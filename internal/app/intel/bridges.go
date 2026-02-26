@@ -3,7 +3,7 @@ package intel
 import (
 	"context"
 
-	"banshee/internal/app/cve"
+	"github.com/Vulnpire/Banshee-AI/internal/app/cve"
 )
 
 func (c *Config) enhancedCVEDetection(ctx context.Context) []cve.CVEEntry {

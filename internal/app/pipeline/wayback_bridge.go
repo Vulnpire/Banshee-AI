@@ -3,8 +3,8 @@ package pipeline
 import (
 	"context"
 
-	"banshee/internal/app/core"
-	"banshee/internal/app/wayback"
+	"github.com/Vulnpire/Banshee-AI/internal/app/core"
+	"github.com/Vulnpire/Banshee-AI/internal/app/wayback"
 )
 
 func loadWaybackIntelligence(domain string) (*core.WaybackIntelligence, error) {

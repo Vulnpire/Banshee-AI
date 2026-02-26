@@ -1,6 +1,6 @@
 package search
 
-import "banshee/internal/app/core"
+import "github.com/Vulnpire/Banshee-AI/internal/app/core"
 
 // Config aliases the shared core.Config for package methods.
 type Config core.Config

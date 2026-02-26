@@ -4,7 +4,7 @@ import (
 	"context"
 	"net/http"
 
-	"banshee/internal/app/tech"
+	"github.com/Vulnpire/Banshee-AI/internal/app/tech"
 )
 
 func (c *Config) detectTechnologies(ctx context.Context) []TechDetectionResult {

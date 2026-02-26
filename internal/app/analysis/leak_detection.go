@@ -11,7 +11,7 @@ import (
 	"strings"
 	"time"
 
-	"banshee/internal/app/console"
+	"github.com/Vulnpire/Banshee-AI/internal/app/console"
 )
 
 // checkPasteSitesForLeaks checks paste sites for leaked credentials

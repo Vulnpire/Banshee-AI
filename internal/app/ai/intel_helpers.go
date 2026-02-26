@@ -1,8 +1,8 @@
 package ai
 
 import (
-	"banshee/internal/app/core"
-	"banshee/internal/app/intel"
+	"github.com/Vulnpire/Banshee-AI/internal/app/core"
+	"github.com/Vulnpire/Banshee-AI/internal/app/intel"
 )
 
 func loadTargetIntelligence(target string) *core.TargetIntelligence {

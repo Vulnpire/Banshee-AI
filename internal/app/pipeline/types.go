@@ -1,9 +1,9 @@
 package pipeline
 
 import (
-	"banshee/internal/app/ai"
-	"banshee/internal/app/analysis"
-	"banshee/internal/app/core"
+	"github.com/Vulnpire/Banshee-AI/internal/app/ai"
+	"github.com/Vulnpire/Banshee-AI/internal/app/analysis"
+	"github.com/Vulnpire/Banshee-AI/internal/app/core"
 )
 
 // Aliases for AI package types used in the pipeline.

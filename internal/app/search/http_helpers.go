@@ -15,7 +15,7 @@ import (
 	"strings"
 	"time"
 
-	"banshee/internal/app/core"
+	"github.com/Vulnpire/Banshee-AI/internal/app/core"
 
 	"golang.org/x/net/proxy"
 )

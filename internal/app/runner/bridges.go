@@ -4,12 +4,12 @@ import (
 	"context"
 	"net/http"
 
-	"banshee/internal/app/ai"
-	"banshee/internal/app/analysis"
-	"banshee/internal/app/core"
-	"banshee/internal/app/search"
-	"banshee/internal/app/utils"
-	"banshee/internal/app/wayback"
+	"github.com/Vulnpire/Banshee-AI/internal/app/ai"
+	"github.com/Vulnpire/Banshee-AI/internal/app/analysis"
+	"github.com/Vulnpire/Banshee-AI/internal/app/core"
+	"github.com/Vulnpire/Banshee-AI/internal/app/search"
+	"github.com/Vulnpire/Banshee-AI/internal/app/utils"
+	"github.com/Vulnpire/Banshee-AI/internal/app/wayback"
 )
 
 type Config = core.Config

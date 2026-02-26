@@ -1,6 +1,6 @@
 package intel
 
-import "banshee/internal/app/core"
+import "github.com/Vulnpire/Banshee-AI/internal/app/core"
 
 func ExtractPatternsFromResults(results []string) []core.SuccessPattern {
 	return extractPatternsFromResults(results)

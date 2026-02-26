@@ -21,7 +21,7 @@ import (
 	"strings"
 	"time"
 
-	"banshee/internal/app/console"
+	"github.com/Vulnpire/Banshee-AI/internal/app/console"
 )
 
 // extractDomainFromURL extracts the domain from a full URL

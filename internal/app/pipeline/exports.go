@@ -3,7 +3,7 @@ package pipeline
 import (
 	"context"
 
-	"banshee/internal/app/core"
+	"github.com/Vulnpire/Banshee-AI/internal/app/core"
 )
 
 func AiDorkAttack(cfg *core.Config, ctx context.Context) {

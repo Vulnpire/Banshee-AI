@@ -3,7 +3,7 @@ package cve
 import (
 	"context"
 
-	"banshee/internal/app/core"
+	"github.com/Vulnpire/Banshee-AI/internal/app/core"
 )
 
 func EnhancedCVEDetection(cfg *core.Config, ctx context.Context) []CVEEntry {

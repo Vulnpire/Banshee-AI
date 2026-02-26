@@ -4,8 +4,8 @@ import (
 	"strings"
 	"sync"
 
-	"banshee/internal/app/analysis"
-	"banshee/internal/app/core"
+	"github.com/Vulnpire/Banshee-AI/internal/app/analysis"
+	"github.com/Vulnpire/Banshee-AI/internal/app/core"
 )
 
 var monitorKeywordOnce sync.Once

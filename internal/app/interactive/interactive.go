@@ -16,7 +16,7 @@ import (
 	"strings"
 	"time"
 
-	"banshee/internal/app/console"
+	"github.com/Vulnpire/Banshee-AI/internal/app/console"
 
 	"golang.org/x/term"
 )

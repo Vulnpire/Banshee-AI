@@ -9,8 +9,8 @@ import (
 	"strings"
 	"time"
 
-	"banshee/internal/app/console"
-	"banshee/internal/app/utils"
+	"github.com/Vulnpire/Banshee-AI/internal/app/console"
+	"github.com/Vulnpire/Banshee-AI/internal/app/utils"
 )
 
 const (

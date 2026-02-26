@@ -3,7 +3,7 @@ package analysis
 import (
 	"context"
 
-	"banshee/internal/app/core"
+	"github.com/Vulnpire/Banshee-AI/internal/app/core"
 )
 
 // DorkRun is injected by the runner to avoid importing the pipeline package here.

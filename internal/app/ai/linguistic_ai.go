@@ -6,8 +6,8 @@ import (
 	"regexp"
 	"strings"
 
-	"banshee/internal/app/console"
-	"banshee/internal/app/core"
+	"github.com/Vulnpire/Banshee-AI/internal/app/console"
+	"github.com/Vulnpire/Banshee-AI/internal/app/core"
 )
 
 // generateLinguisticDorks generates dorks based on linguistic intelligence

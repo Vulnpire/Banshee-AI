@@ -4,8 +4,8 @@ import (
 	"context"
 	"net/http"
 
-	"banshee/internal/app/ai"
-	"banshee/internal/app/search"
+	"github.com/Vulnpire/Banshee-AI/internal/app/ai"
+	"github.com/Vulnpire/Banshee-AI/internal/app/search"
 )
 
 func (c *Config) callGeminiCLIWithLargeData(ctx context.Context, systemPrompt, userPrompt string) (string, error) {

@@ -1,6 +1,6 @@
 package pipeline
 
-import "banshee/internal/app/search"
+import "github.com/Vulnpire/Banshee-AI/internal/app/search"
 
 func uniqueStrings(values []string) []string {
 	return search.UniqueStrings(values)

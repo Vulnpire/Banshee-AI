@@ -1,6 +1,6 @@
 package pipeline
 
-import "banshee/internal/app/utils"
+import "github.com/Vulnpire/Banshee-AI/internal/app/utils"
 
 func checkGeminiCLI() error {
 	return utils.CheckGeminiCLI()

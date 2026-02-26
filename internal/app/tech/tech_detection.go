@@ -11,8 +11,8 @@ import (
 	"strings"
 	"time"
 
-	"banshee/internal/app/console"
-	"banshee/internal/app/cve"
+	"github.com/Vulnpire/Banshee-AI/internal/app/console"
+	"github.com/Vulnpire/Banshee-AI/internal/app/cve"
 
 	wappalyzergo "github.com/projectdiscovery/wappalyzergo"
 )

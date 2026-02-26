@@ -11,7 +11,7 @@ import (
 	"strings"
 	"time"
 
-	"banshee/internal/app/console"
+	"github.com/Vulnpire/Banshee-AI/internal/app/console"
 )
 
 // generateDorksWithAI uses gemini-cli to generate custom dorks and ensures the requested quantity is honored.

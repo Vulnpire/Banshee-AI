@@ -1,6 +1,6 @@
 package intel
 
-import "banshee/internal/app/core"
+import "github.com/Vulnpire/Banshee-AI/internal/app/core"
 
 func ViewIntelligence(cfg *core.Config, target string) error {
 	return asConfig(cfg).viewIntelligence(target)
