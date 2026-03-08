@@ -102,7 +102,7 @@ This is only a summary.
 
 For full feature coverage, use:
 
-- `https://vulnpire.github.io/-AI`
+- `https://vulnpire.github.io/Banshee-AI`
 - `docs/index.html`
 
 ## Requirements
